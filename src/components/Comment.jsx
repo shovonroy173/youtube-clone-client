@@ -50,7 +50,7 @@ const Comment = ({ comment }) => {
 // console.log( "LINE AT 48" , currentUser);
   useEffect(() => {
     const fetchComment = async () => {
-      const res = await axios.get(`http://localhost:5000/api/users/find/${comment.userId}`, {
+      const res = await axios.get(`https://youtubeapi-rlw4.onrender.com/api/users/find/${comment.userId}`, {
         headers:{
           token: currentUser.accessToken
         }
@@ -64,7 +64,7 @@ const Comment = ({ comment }) => {
   
 const handleDelete = async()=>{
   await axios.delete(
-    `http://localhost:5000/api/comments/${currentVideo?._id}`  , {comm}
+    `https://youtubeapi-rlw4.onrender.com/api/comments/${currentVideo?._id}`  , {comm}
        
   );
 }

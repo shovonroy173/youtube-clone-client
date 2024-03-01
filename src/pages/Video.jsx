@@ -141,10 +141,10 @@ const Video = () => {
     const fetchData = async () => {
       try {
         const videoRes = await axios.get(
-          `http://localhost:5000/api/videos/find/${path}`
+          `https://youtubeapi-rlw4.onrender.com/api/videos/find/${path}`
         );
         const channelRes = await axios.get(
-          `http://localhost:5000/api/users/find/${videoRes.data.userId}`
+          `https://youtubeapi-rlw4.onrender.com/api/users/find/${videoRes.data.userId}`
         );
         
         dispatch(fetchSuccess(videoRes.data));
@@ -161,7 +161,7 @@ useEffect(()=>{
   const fetchView = async () => {
     if(view){
    await axios.put(
-    `http://localhost:5000/api/videos/view/${currentVideo?._id}`
+    `https://youtubeapi-rlw4.onrender.com/api/videos/view/${currentVideo?._id}`
   );
     }
   
@@ -171,7 +171,7 @@ useEffect(()=>{
   currentVideo?._id
 ])
   const handleLike = async () => {
-    await axios.put(`http://localhost:5000/api/users/like/${currentVideo._id}` , {
+    await axios.put(`https://youtubeapi-rlw4.onrender.com/api/users/like/${currentVideo._id}` , {
       headers:{
         token: currentUser.accessToken
       }
@@ -182,7 +182,7 @@ useEffect(()=>{
   };
   const handleDisLike = async () => {
     await axios.put(
-      `http://localhost:5000/api/users/dislike/${currentVideo?._id}` , {
+      `https://youtubeapi-rlw4.onrender.com/api/users/dislike/${currentVideo?._id}` , {
         headers:{
           token: currentUser.accessToken
         }
@@ -195,14 +195,14 @@ useEffect(()=>{
   const handleSub = async () => {
     currentUser.subscribedUsers?.includes(channel._id)
       ? await axios.put(
-          `http://localhost:5000/api/users/unsubscribe/${channel._id}` , {
+          `https://youtubeapi-rlw4.onrender.com/api/users/unsubscribe/${channel._id}` , {
             headers:{
               token: currentUser.accessToken
             }
           }
         )
       : await axios.put(
-          `http://localhost:5000/api/users/subscribe/${channel._id}` , 
+          `https://youtubeapi-rlw4.onrender.com/api/users/subscribe/${channel._id}` , 
         );
 
     dispatch(subscription(channel._id));

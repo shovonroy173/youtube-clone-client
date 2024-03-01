@@ -73,7 +73,7 @@ const Upload = ({ setOpen }) => {
   const [name , setName] = useState("");
 
   const handleChange = async(event)=>{
-    await axios.put(`http://localhost:5000/api/users/${currentUser._id}` , {name})
+    await axios.put(`https://youtubeapi-rlw4.onrender.com/api/users/${currentUser._id}` , {name})
     
   }
 

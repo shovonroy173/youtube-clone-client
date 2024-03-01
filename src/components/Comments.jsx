@@ -39,7 +39,7 @@ const Comments = ({videoId}) => {
   useEffect(() => { 
     const fetchComments = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/comments/${videoId}`
+        const res = await axios.get(`https://youtubeapi-rlw4.onrender.com/api/comments/${videoId}`
         // , {
         //   headers:{
         //     token: currentUser.accessToken
@@ -56,7 +56,7 @@ const Comments = ({videoId}) => {
   const handleComment = async()=>{
    
     await axios.post(
-      `http://localhost:5000/api/comments/`  , {
+      `https://youtubeapi-rlw4.onrender.com/api/comments/`  , {
          videoId , desc:addComments  }
     );
     console.log(addComments , videoId);

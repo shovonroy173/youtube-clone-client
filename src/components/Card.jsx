@@ -70,7 +70,7 @@ const Card = ({ type, video }) => {
   useEffect(() => {
     const fetchChannel = async () => {
       const res = await axios.get(
-        `http://localhost:5000/api/users/find/${video.userId}`
+        `https://youtubeapi-rlw4.onrender.com/api/users/find/${video.userId}`
         // , {
         //   headers:{
         //     token: currentUser.accessToken
