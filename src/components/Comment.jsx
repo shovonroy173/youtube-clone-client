@@ -51,7 +51,7 @@ const Comment = ({ comment }) => {
   useEffect(() => {
     const fetchUser = async () => {
       const res = await axios.get(
-        `http://localhost:5000/api/users/find/${comment?.userId}`
+        `https://youtubeapi-rlw4.onrender.com/api/users/find/${comment?.userId}`
       );
       setChannel(res.data);
     };
@@ -63,7 +63,7 @@ const Comment = ({ comment }) => {
   const userId = currentUser._id;
   const handleDelete = async () => {
     await axios.delete(
-      `http://localhost:5000/api/comments/${currentVideo?._id}`,
+      `https://youtubeapi-rlw4.onrender.com/api/comments/${currentVideo?._id}`,
       { userId, comm }
     );
   };

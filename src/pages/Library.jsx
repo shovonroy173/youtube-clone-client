@@ -28,7 +28,7 @@ const Home = ({ type }) => {
   const [likevideos, setLikeVideos] = useState([]);
   useEffect(() => {
     const fetchLikeVideos = async () => {
-      const res = await axios.get(`http://localhost:5000/api/videos/likes`);
+      const res = await axios.get(`https://youtubeapi-rlw4.onrender.com/api/videos/likes`);
       setLikeVideos(res.data);
     };
     fetchLikeVideos();
@@ -36,7 +36,7 @@ const Home = ({ type }) => {
   const [disvideos, setDisVideos] = useState([]);
   useEffect(() => {
     const fetchDisVideos = async () => {
-      const res = await axios.get(`http://localhost:5000/api/videos/dislikes`);
+      const res = await axios.get(`https://youtubeapi-rlw4.onrender.com/api/videos/dislikes`);
       setDisVideos(res.data);
     };
     fetchDisVideos();

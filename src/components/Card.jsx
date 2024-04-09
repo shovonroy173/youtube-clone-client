@@ -74,7 +74,7 @@ const Card = ({ type, video }) => {
     const fetchChannel = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/users/find/${videoId}`
+          `https://youtubeapi-rlw4.onrender.com/api/users/find/${videoId}`
         );
         setChannel(res.data);
       } catch (error) {

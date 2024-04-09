@@ -148,10 +148,10 @@ const Video = () => {
     const fetchData = async () => {
       try {
         const videoRes = await axios.get(
-          `http://localhost:5000/api/videos/find/${path}`
+          `https://youtubeapi-rlw4.onrender.com/api/videos/find/${path}`
         );
         const channelRes = await axios.get(
-          `http://localhost:5000/api/users/find/${videoRes.data.userId}`
+          `https://youtubeapi-rlw4.onrender.com/api/users/find/${videoRes.data.userId}`
         );
 
         dispatch(fetchSuccess(videoRes.data));
@@ -170,7 +170,7 @@ const Video = () => {
     const fetchView = async () => {
       if (view) {
         await axios.put(
-          `http://localhost:5000/api/videos/view/${currentVideo?._id}`,
+          `https://youtubeapi-rlw4.onrender.com/api/videos/view/${currentVideo?._id}`,
           { userId }
         );
       }
@@ -180,7 +180,7 @@ const Video = () => {
   const handleLike = async () => {
     console.log("CLICK");
     const res = await axios.put(
-      `http://localhost:5000/api/users/like/${currentVideo._id}`,
+      `https://youtubeapi-rlw4.onrender.com/api/users/like/${currentVideo._id}`,
       { userId }
     );
     console.log(res.data);
@@ -188,7 +188,7 @@ const Video = () => {
   };
   const handleDisLike = async () => {
     await axios.put(
-      `http://localhost:5000/api/users/dislike/${currentVideo?._id}`,
+      `https://youtubeapi-rlw4.onrender.com/api/users/dislike/${currentVideo?._id}`,
       { userId }
     );
     dispatch(dislike(currentUser?._id));
@@ -196,11 +196,11 @@ const Video = () => {
   const handleSub = async () => {
     currentUser.subscribedUsers?.includes(channel._id)
       ? await axios.put(
-          `http://localhost:5000/api/users/unsubscribe/${channel?._id}`,
+          `https://youtubeapi-rlw4.onrender.com/api/users/unsubscribe/${channel?._id}`,
           { userId }
         )
       : await axios.put(
-          `http://localhost:5000/api/users/subscribe/${channel?._id}`,
+          `https://youtubeapi-rlw4.onrender.com/api/users/subscribe/${channel?._id}`,
           { userId }
         );
 

@@ -152,7 +152,7 @@ const Upload = ({ setOpen }) => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/videos/",
+        "https://youtubeapi-rlw4.onrender.com/api/videos/",
        { inputs,
         userId}
       );

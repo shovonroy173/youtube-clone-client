@@ -47,7 +47,7 @@ const userId = currentUser._id;
   useEffect(() => { 
     const fetchComments = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/comments/${videoId}`
+        const res = await axios.get(`https://youtubeapi-rlw4.onrender.com/api/comments/${videoId}`
         );
         setComments(res.data);
       } catch (err) {}
@@ -60,7 +60,7 @@ const userId = currentUser._id;
   const handleComment = async()=>{
    
     await axios.post(
-      `http://localhost:5000/api/comments/`  , { userId , 
+      `https://youtubeapi-rlw4.onrender.com/api/comments/`  , { userId , 
          videoId , desc:addComments  }
     );
     console.log(addComments , videoId);

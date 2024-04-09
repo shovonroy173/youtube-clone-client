@@ -79,7 +79,7 @@ const Upload = ({ setOpen }) => {
   const handleChange = async(event)=>{
     console.log("CLICK");
     const res = 
-    await axios.put(`http://localhost:5000/api/users/${currentUser._id}` , {name , userId});
+    await axios.put(`https://youtubeapi-rlw4.onrender.com/api/users/${currentUser._id}` , {name , userId});
 
     console.log(res.data);
 
