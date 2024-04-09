@@ -19,12 +19,12 @@ const Home = ({ type }) => {
   const [videos, setVideos] = useState([]);
   useEffect(() => {
     const fetchVideos = async () => {
-      const res = await axios.get(`https://youtubeapi-rlw4.onrender.com/api/videos/${type}`);
+      const res = await axios.get(`http://localhost:5000/api/videos/${type}`);
       setVideos(res.data);
     };
     fetchVideos();
   }, [type]);
-  // console.log(videos);
+  console.log(videos);
   return (
     <>
       <div>

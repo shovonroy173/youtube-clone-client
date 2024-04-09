@@ -3,7 +3,8 @@ import styled from "styled-components";
 
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateName } from "../redux/userSlice";
 
 
 const Container = styled.div`
@@ -71,9 +72,18 @@ const Label = styled.label`
 const Upload = ({ setOpen }) => {
   const {currentUser} = useSelector((state)=>state.user);
   const [name , setName] = useState("");
+  const userId = currentUser._id;
+  console.log("LINE AT 75" , userId);
 
+  const dispatch = useDispatch();
   const handleChange = async(event)=>{
-    await axios.put(`https://youtubeapi-rlw4.onrender.com/api/users/${currentUser._id}` , {name})
+    console.log("CLICK");
+    const res = 
+    await axios.put(`http://localhost:5000/api/users/${currentUser._id}` , {name , userId});
+
+    console.log(res.data);
+
+    dispatch(updateName(name))
     
   }
 

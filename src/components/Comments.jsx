@@ -13,11 +13,11 @@ const NewComment = styled.div`
   gap: 10px;
 `;
 
-const Avatar = styled.img`
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-`;
+// const Avatar = styled.img`
+//   width: 50px;
+//   height: 50px;
+//   border-radius: 50%;
+// `;
 
 const Input = styled.input`
   border: none;
@@ -29,54 +29,57 @@ const Input = styled.input`
   width: 100%;
 `;
 
+const Avatar = styled.p`
+  width: 50px;
+  height: 40px;
+  border-radius: 100%;
+  background-color: gray;
+  text-align: center;
+  color: ${({ theme }) => theme.text};
+`;
 const Comments = ({videoId}) => {
 
   const  {currentUser}  = useSelector((state) => state.user);
-
+const userId = currentUser._id;
   const [comments, setComments] = useState([]);
   const [addComments, setAddComments] = useState("");
 
   useEffect(() => { 
     const fetchComments = async () => {
       try {
-        const res = await axios.get(`https://youtubeapi-rlw4.onrender.com/api/comments/${videoId}`
-        // , {
-        //   headers:{
-        //     token: currentUser.accessToken
-        //   }
-        // }
+        const res = await axios.get(`http://localhost:5000/api/comments/${videoId}`
         );
         setComments(res.data);
       } catch (err) {}
     };
     fetchComments();
   }, [videoId]);
+  console.log( "LINE AT 49", comments);
 
   //TODO: ADD NEW COMMENT FUNCTIONALITY
   const handleComment = async()=>{
    
     await axios.post(
-      `https://youtubeapi-rlw4.onrender.com/api/comments/`  , {
+      `http://localhost:5000/api/comments/`  , { userId , 
          videoId , desc:addComments  }
     );
     console.log(addComments , videoId);
     setAddComments("");
   }
- useEffect(()=>{
-  handleComment();
- } , [])
+//  useEffect(()=>{
+//   handleComment();
+//  } , [])
 
 
   return (
     <Container>
       <NewComment>
-        <Avatar src={currentUser?.img} />
+        <Avatar>{currentUser?.name[0]}</Avatar>
         <Input placeholder="Add a comment..." value={addComments}  onChange={(e)=>{setAddComments(e.target.value)}} />
         <Button onClick={handleComment} >Comment</Button>
       </NewComment>
-      {comments.map(comment=>(
-        <Comment key={comment._id} comment={comment}/>
-        
+      {comments?.map(comment=>(
+        <Comment key={comment._id} comment={comment}/>     
       ))}
     </Container>
   );

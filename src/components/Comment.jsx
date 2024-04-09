@@ -42,43 +42,49 @@ const Text = styled.span`
 
 const Comment = ({ comment }) => {
   const [channel, setChannel] = useState({});
-  const {currentUser} = useSelector(state => state.user);
-  const {currentVideo} = useSelector(state => state.video);
+  const { currentUser } = useSelector((state) => state.user);
+  const { currentVideo } = useSelector((state) => state.video);
   const [open, setOpen] = useState(false);
   const [setData, setSetData] = useState(false);
 
-// console.log( "LINE AT 48" , currentUser);
+  console.log("LINE AT 48", channel);
   useEffect(() => {
-    const fetchComment = async () => {
-      const res = await axios.get(`https://youtubeapi-rlw4.onrender.com/api/users/find/${comment.userId}`, {
-        headers:{
-          token: currentUser.accessToken
-        }
-      });
-      setChannel(res.data)
+    const fetchUser = async () => {
+      const res = await axios.get(
+        `http://localhost:5000/api/users/find/${comment?.userId}`
+      );
+      setChannel(res.data);
     };
-    fetchComment();
+    fetchUser();
   }, [comment?.userId]);
-  console.log("LINE AT 62" , comment);
+  console.log("LINE AT 62", comment);
   const comm = comment.desc;
+
+  const userId = currentUser._id;
+  const handleDelete = async () => {
+    await axios.delete(
+      `http://localhost:5000/api/comments/${currentVideo?._id}`,
+      { userId, comm }
+    );
+  };
+useEffect(()=>{
+  setOpen(currentUser._id === comment.userId ? true : false);
+} , [currentUser._id , comment.userId])
   
-const handleDelete = async()=>{
-  await axios.delete(
-    `https://youtubeapi-rlw4.onrender.com/api/comments/${currentVideo?._id}`  , {comm}
-       
-  );
-}
-const switchFunc = ()=>{
-  setOpen((prevState)=>!prevState);
-}
+
+  const channelName = (channel) ? channel?.name : "user";
+
   return (
     <Container>
-      <Avatar src={currentUser?.name[0]} />
+       <Avatar src={channelName[0]} />
       <Details>
-        <Name>
-          {currentUser.name} <Date>{format(comment?.createdAt)}</Date>
-        </Name>
-        <Text onClick={switchFunc  }  >{comment.desc}</Text>
+        {channel && (
+          <Name>
+            {channelName} <Date>{format(comment?.createdAt)}</Date>
+          </Name>
+        )}
+
+        <Text>{comment.desc}</Text>
         {open ? <Button onClick={handleDelete}>Delete</Button> : ""}
       </Details>
     </Container>

@@ -12,10 +12,8 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const Body = styled.div`
-scroll:no; 
-overflow-y: hidden;
-
-  
+  scroll: no;
+  overflow-y: hidden;
 `;
 const Container = styled.div`
   width: 100%;
@@ -31,7 +29,7 @@ const Container = styled.div`
 
 const Wrapper = styled.div`
   width: 600px;
-  height: 600px;
+  height: 700px;
   background-color: ${({ theme }) => theme.bgLighter};
   color: ${({ theme }) => theme.text};
   padding: 20px;
@@ -85,7 +83,7 @@ const Upload = ({ setOpen }) => {
   const [inputs, setInputs] = useState({});
   const [tags, setTags] = useState([]);
   const { currentUser } = useSelector((state) => state.user);
-  // console.log(currentUser.accessToken);
+  const userId = currentUser?._id;
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -95,9 +93,12 @@ const Upload = ({ setOpen }) => {
   };
 
   const handleTags = (e) => {
-    setTags(e.target.value.split(","));
+    setTags(e.target.value.trim().split(","));
+    setInputs((prev) => {
+      return { ...prev, [e.target.name]: tags};
+    });
   };
-  console.log(tags);
+  // console.log(tags);
   // function to submit form data and create a post with the image/video uploaded by user
   const uploadFile = (file, urlType) => {
     const storage = getStorage(app);
@@ -124,7 +125,9 @@ const Upload = ({ setOpen }) => {
             break;
         }
       },
-      (error) => {console.log(error);},
+      (error) => {
+        console.log(error);
+      },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setInputs((prev) => {
@@ -135,75 +138,79 @@ const Upload = ({ setOpen }) => {
     );
   };
 
-  useEffect(() => {
-    video && uploadFile(video, "videoUrl");
-  }, [video]);
+  // useEffect(() => {
+  //   video && uploadFile(video, "videoUrl");
+  // }, [video]);
 
   useEffect(() => {
     img && uploadFile(img, "imgUrl");
   }, [img]);
+  console.log(inputs);
 
   const handleUpload = async (e) => {
+    console.log("click");
     e.preventDefault();
-    const res = await axios.post(
-      "https://youtubeapi-rlw4.onrender.com/api/videos/",
-      { ...inputs, tags },
-      {
-        headers: {
-          token: currentUser.accessToken,
-        },
-      }
-    );
-    setOpen(false);
-    res.status === 200 && navigate(`/video/${res.data._id}`);
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/videos/",
+       { inputs,
+        userId}
+      );
+      console.log(res.data);
+      setOpen(false);
+      res.status === 200 && navigate(`/video/${res.data._id}`);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <Body>
-    <Container>
-      <Wrapper>
-        <Close onClick={() => setOpen(false)}>X</Close>
-        <Title>Upload a New Video</Title>
-        <Label>Video:</Label>
-        {videoPerc > 0 ? (
-          "Uploading:" + videoPerc + "%"
-        ) : (
+      <Container>
+        <Wrapper>
+          <Close onClick={() => setOpen(false)}>X</Close>
+          <Title>Upload a New Video</Title>
+          <Label>Video:</Label>
+          {videoPerc > 0 ? (
+            "Uploading:" + videoPerc + "%"
+          ) : (
+            <Input
+              type="file"
+              accept="video/*"
+              onChange={(e) => setVideo(e.target.files[0])}
+            />
+          )}
           <Input
-            type="file"
-            accept="video/*"
-            onChange={(e) => setVideo(e.target.files[0])}
+            type="text"
+            placeholder="Title"
+            name="title"
+            onChange={handleChange}
           />
-        )}
-        <Input
+          <Desc
+            placeholder="Description"
+            name="desc"
+            rows={8}
+            onChange={handleChange}
+          />
+          <Input
           type="text"
-          placeholder="Title"
-          name="title"
-          onChange={handleChange}
-        />
-        <Desc
-          placeholder="Description"
-          name="desc"
-          rows={8}
-          onChange={handleChange}
-        />
-        <Input
-          type="text"
-          placeholder="Separate the tags with commas."
+          name="tags"
+          placeholder="Separate the tags with commas !!NO SPACE!!."
           onChange={handleTags}
         />
-        <Label>Image:</Label>
-        {imgPerc > 0 ? (
-          "Uploading:" + imgPerc + "%"
-        ) : (
-          <Input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setImg(e.target.files[0])}
-          />
-        )}
-        <Button onClick={handleUpload}>Upload</Button>
-      </Wrapper>
-    </Container>
+          <Label>Image:</Label>
+          {imgPerc > 0 ? (
+            "Uploading:" + imgPerc + "%"
+          ) : (
+            <Input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setImg(e.target.files[0])}
+            />
+          )}
+          <Button onClick={handleUpload}>Upload</Button>
+        </Wrapper>
+      </Container>
     </Body>
   );
 };

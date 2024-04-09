@@ -97,6 +97,15 @@ const ChannelCounter = styled.span`
   font-size: 12px;
 `;
 
+const Avatar = styled.p`
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: gray;
+  text-align: center;
+  color: ${({ theme }) => theme.text};
+`;
+
 const Description = styled.p`
   font-size: 14px;
 `;
@@ -112,7 +121,6 @@ const Subscribe = styled.button`
   cursor: pointer;
 `;
 
-
 const VideoFrame = styled.video`
   max-height: 720px;
   width: 100%;
@@ -123,30 +131,29 @@ const VideoFrame = styled.video`
 // `;
 
 const Video = () => {
-  const {currentUser}  = useSelector((state) => state.user);
-  const  {currentVideo}  = useSelector((state) => state.video);
-  console.log(currentVideo?._id);
+  const { currentUser } = useSelector((state) => state.user);
+  const { currentVideo } = useSelector((state) => state.video);
+  console.log("LINE AT 128", currentVideo);
 
   const path = useLocation().pathname.split("/")[2];
   // console.log(path);
   const dispatch = useDispatch();
 
-
   const [channel, setChannel] = useState({});
   const [view, setView] = useState(false);
-  console.log(currentVideo);
+
   // console.log(channel);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const videoRes = await axios.get(
-          `https://youtubeapi-rlw4.onrender.com/api/videos/find/${path}`
+          `http://localhost:5000/api/videos/find/${path}`
         );
         const channelRes = await axios.get(
-          `https://youtubeapi-rlw4.onrender.com/api/users/find/${videoRes.data.userId}`
+          `http://localhost:5000/api/users/find/${videoRes.data.userId}`
         );
-        
+
         dispatch(fetchSuccess(videoRes.data));
         setChannel(channelRes.data);
         setView(true);
@@ -154,68 +161,57 @@ const Video = () => {
       } catch (error) {
         console.log(error);
       }
-    }; 
+    };
     fetchData();
-  } , [path]);
-useEffect(()=>{
-  const fetchView = async () => {
-    if(view){
-   await axios.put(
-    `https://youtubeapi-rlw4.onrender.com/api/videos/view/${currentVideo?._id}`
-  );
-    }
-  
-}
-  fetchView()
-} , [view , 
-  currentVideo?._id
-])
-  const handleLike = async () => {
-    await axios.put(`https://youtubeapi-rlw4.onrender.com/api/users/like/${currentVideo._id}` , {
-      headers:{
-        token: currentUser.accessToken
+  }, [dispatch, path]);
+  console.log("LINE AT 160", channel);
+  const userId = currentUser._id;
+  useEffect(() => {
+    const fetchView = async () => {
+      if (view) {
+        await axios.put(
+          `http://localhost:5000/api/videos/view/${currentVideo?._id}`,
+          { userId }
+        );
       }
-    });
-    dispatch(like
-      (currentUser._id)
+    };
+    fetchView();
+  }, [view, currentVideo?._id, userId]);
+  const handleLike = async () => {
+    console.log("CLICK");
+    const res = await axios.put(
+      `http://localhost:5000/api/users/like/${currentVideo._id}`,
+      { userId }
     );
+    console.log(res.data);
+    dispatch(like(currentUser._id));
   };
   const handleDisLike = async () => {
     await axios.put(
-      `https://youtubeapi-rlw4.onrender.com/api/users/dislike/${currentVideo?._id}` , {
-        headers:{
-          token: currentUser.accessToken
-        }
-      }
+      `http://localhost:5000/api/users/dislike/${currentVideo?._id}`,
+      { userId }
     );
-    dispatch(dislike
-      (currentUser?._id)
-    );
+    dispatch(dislike(currentUser?._id));
   };
   const handleSub = async () => {
     currentUser.subscribedUsers?.includes(channel._id)
       ? await axios.put(
-          `https://youtubeapi-rlw4.onrender.com/api/users/unsubscribe/${channel._id}` , {
-            headers:{
-              token: currentUser.accessToken
-            }
-          }
+          `http://localhost:5000/api/users/unsubscribe/${channel?._id}`,
+          { userId }
         )
       : await axios.put(
-          `https://youtubeapi-rlw4.onrender.com/api/users/subscribe/${channel._id}` , 
+          `http://localhost:5000/api/users/subscribe/${channel?._id}`,
+          { userId }
         );
 
-    dispatch(subscription(channel._id));
+    dispatch(subscription(channel?._id));
   };
   // console.log("currentVideo" , currentVideo.tags)
   return (
-   <Container>
+    <Container>
       <Content>
         <VideoWrapper>
-        <VideoFrame src=
-       
-       {currentVideo?.videoUrl}
-         controls />
+          <VideoFrame src={currentVideo?.videoUrl} controls />
         </VideoWrapper>
 
         <Title>{currentVideo?.title}</Title>
@@ -251,29 +247,23 @@ useEffect(()=>{
         <Hr />
         <Channel>
           <ChannelInfo>
-            <Image
-              src={
-                "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
-              }
-            />
+            <Avatar>{channel?.name[0]}</Avatar>
             <ChannelDetail>
-              <ChannelName>{channel.name}</ChannelName>
-              <ChannelCounter>{channel.subscribers} subscribers</ChannelCounter>
+              <ChannelName>{channel?.name}</ChannelName>
+              <ChannelCounter>{channel?.subscribers} subscribers</ChannelCounter>
               <Description>{currentVideo?.desc}</Description>
             </ChannelDetail>
           </ChannelInfo>
           <Subscribe onClick={handleSub}>
-          {currentUser?.subscribedUsers?.includes(channel._id)
-              ? ( "SUBSCRIBED"
-                )
-              : "SUBSCRIBE"} 
+            {currentUser?.subscribedUsers?.includes(channel._id)
+              ? "SUBSCRIBED"
+              : "SUBSCRIBE"}
           </Subscribe>
         </Channel>
         <Hr />
         <Comments videoId={currentVideo?._id} />
       </Content>
       <Recommendation tags={currentVideo?.tags} />
-       
     </Container>
   );
 };

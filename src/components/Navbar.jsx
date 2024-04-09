@@ -85,7 +85,7 @@ const Navbar = () => {
   console.log("NAVBAR LINE AT 85" , currentUser);
   const dispatch = useDispatch()
   const navigate = useNavigate();
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
 
   const handleLogout = ()=>{

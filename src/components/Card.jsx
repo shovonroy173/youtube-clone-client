@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { format } from "timeago.js";
 import axios from "axios";
 import { useSelector } from "react-redux";
+
 const Container = styled.div`
   width: ${(props) => props.type !== "sm" && "360px"};
   margin-bottom: ${(props) => (props.type === "sm" ? "10px" : "45px")};
@@ -65,23 +66,26 @@ const Avatar = styled.p`
 const Card = ({ type, video }) => {
   const [channel, setChannel] = useState({});
   const { currentUser } = useSelector((state) => state.user);
-  console.log(currentUser);
+  console.log("LINE AT 68", video);
+  const videoId = video?.userId;
+  //  console.log(userId);
 
   useEffect(() => {
     const fetchChannel = async () => {
-      const res = await axios.get(
-        `https://youtubeapi-rlw4.onrender.com/api/users/find/${video.userId}`
-        // , {
-        //   headers:{
-        //     token: currentUser.accessToken
-        //   }
-        // }
-      );
-      setChannel(res.data);
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/api/users/find/${videoId}`
+        );
+        setChannel(res.data);
+      } catch (error) {
+        console.log(error);
+      }
     };
     fetchChannel();
-  }, [video?.userId]);
-  //  console.log( video)
+  }, [videoId]);
+
+  console.log("LINE AT 85", channel);
+  const channelName = channel?.name || "user";
   return (
     <>
       {currentUser ? (
@@ -89,10 +93,11 @@ const Card = ({ type, video }) => {
           <Container type={type}>
             <Image type={type} src={video.imgUrl} />
             <Details type={type}>
-              {/* <Avatar>{currentUser.name[0].toUpperCase()}</Avatar> */}
+              {channel ? <Avatar>{channelName[0]?.toUpperCase()}</Avatar> : ""}
               <Texts>
                 <Title>{video.title}</Title>
-                <ChannelName> {channel.name}</ChannelName>
+                {/* <ChannelName> {channelName}</ChannelName> */}
+
                 <Info>
                   {video.views} views . {format(video.createdAt)}
                 </Info>
@@ -104,10 +109,10 @@ const Card = ({ type, video }) => {
         <Container type={type}>
           <Image type={type} src={video.imgUrl} />
           <Details type={type}>
-            {/* <Avatar>{currentUser.name[0].toUpperCase()}</Avatar> */}
+            <Avatar>{channel?.name?.toUpperCase()}</Avatar>
             <Texts>
               <Title>{video.title}</Title>
-              <ChannelName> {channel.name}</ChannelName>
+              <ChannelName> {channel?.name}</ChannelName>
               <Info>
                 {video.views} views . {format(video.createdAt)}
               </Info>

@@ -80,7 +80,7 @@ const SignIn = () => {
   const navigate = useNavigate();
   const handleRegister = async (e)=>{
     e.preventDefault();
-     await axios.post("https://youtubeapi-rlw4.onrender.com/api/auth/signup", {name , email , password} );
+     await axios.post("http://localhost:5000/api/auth/signup", {name , email , password} );
      setRedirect(true);
      navigate("/");
      if (redirect) {
@@ -91,7 +91,7 @@ const SignIn = () => {
     try { 
       e.preventDefault();
       dispatch(loginStart());
-      const user = await axios.post("https://youtubeapi-rlw4.onrender.com/api/auth/signin", {
+      const user = await axios.post("http://localhost:5000/api/auth/signin", {
         name,
         password,
       });
@@ -100,6 +100,7 @@ const SignIn = () => {
       navigate("/");
       // console.log(user);
     } catch (err) {
+      console.log(err);
       dispatch(loginFailure());
     }
     if (redirect) {

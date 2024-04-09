@@ -88,14 +88,14 @@ const Button = styled.button`
 const Menu = ({ darkMode, setDarkMode }) => {
   const {currentUser} = useSelector((state)=>state.user);
   const [open, setOpen] = useState(false);
-  console.log(currentUser);
+  // console.log(currentUser);
   return (
     <Container>
       <Wrapper>
         <Link to="/" style={{textDecoration:"none" , color:"inherit" }} >
         <Logo  >
           <Img src={img} />
-          Toob
+          VidVista
         </Logo>
         </Link>
         <Link to="/" style={{textDecoration:"none" , color:"inherit" }} >
