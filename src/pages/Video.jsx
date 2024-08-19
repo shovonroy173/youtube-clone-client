@@ -126,9 +126,7 @@ const VideoFrame = styled.video`
   width: 100%;
   object-fit: cover;
 `;
-// const Recommendation = styled.div`
-//   flex: 2;
-// `;
+
 
 const Video = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -142,7 +140,6 @@ const Video = () => {
   const [channel, setChannel] = useState({});
   const [view, setView] = useState(false);
 
-  // console.log(channel);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -164,7 +161,8 @@ const Video = () => {
     };
     fetchData();
   }, [dispatch, path]);
-  console.log("LINE AT 160", channel);
+
+
   const userId = currentUser._id;
   useEffect(() => {
     const fetchView = async () => {
@@ -247,7 +245,8 @@ const Video = () => {
         <Hr />
         <Channel>
           <ChannelInfo>
-            <Avatar>{channel?.name[0]}</Avatar>
+          
+            <Avatar>{channel?.name}</Avatar>
             <ChannelDetail>
               <ChannelName>{channel?.name}</ChannelName>
               <ChannelCounter>{channel?.subscribers} subscribers</ChannelCounter>
