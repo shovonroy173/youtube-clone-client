@@ -82,7 +82,7 @@ const Avatar = styled.p`
 const Navbar = () => {
   const  {currentUser}  = useSelector((state) => state.user);
   // console.log(currentUser.name[0]);
-  console.log("NAVBAR LINE AT 85" , currentUser);
+  // console.log("NAVBAR LINE AT 85" , currentUser);
   const dispatch = useDispatch()
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);

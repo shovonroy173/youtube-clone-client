@@ -88,6 +88,7 @@ const Button = styled.button`
 
 const Menu = ({ darkMode, setDarkMode }) => {
   const {currentUser} = useSelector((state)=>state.user);
+  const userId = currentUser._id;
   const [open, setOpen] = useState(false);
   // console.log(currentUser);
   return (
@@ -118,12 +119,12 @@ const Menu = ({ darkMode, setDarkMode }) => {
         </Item>
         </Link>
         <Hr />
-        <Link to="likes"style={{textDecoration : "none" , color:"inherit"}}  >
+        {/* <Link to={`likes/${userId}`} style={{textDecoration : "none" , color:"inherit"}}  >
         <Item>
           <VideoLibraryOutlinedIcon />
           Library
         </Item>
-        </Link>
+        </Link> */}
         <Link to="latest"style={{textDecoration : "none" , color:"inherit"}}  >
         <Item>
           <HistoryOutlinedIcon />

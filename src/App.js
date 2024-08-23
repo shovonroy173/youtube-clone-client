@@ -96,7 +96,10 @@ function App() {
                   />
                   <Route
                     path="likes"
-                    element={
+                    
+                    
+                  >
+                    <Route path=":like" element={
                       currentUser ? (
                         
                         <Library/>
@@ -107,7 +110,8 @@ function App() {
                         </Title>
                       )
                     }
-                  />
+                    />
+                  </Route>
                   <Route
                     path="latest"
                     element={

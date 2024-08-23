@@ -5,6 +5,7 @@ import Card from "../components/Card";
 
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import { useSelector } from "react-redux";
 
 const Container = styled.div`
   color: ${({ theme }) => theme.text};
@@ -26,13 +27,16 @@ font-weight: 1000;
 
 const Home = ({ type }) => {
   const [likevideos, setLikeVideos] = useState([]);
+  const { currentUser } = useSelector((state) => state.user);
+const userId = currentUser._id;
+
   useEffect(() => {
     const fetchLikeVideos = async () => {
-      const res = await axios.get(`https://youtubeapi-rlw4.onrender.com/api/videos/likes`);
+      const res = await axios.get(`https://youtubeapi-rlw4.onrender.com/api/videos/likes/${userId}`);
       setLikeVideos(res.data);
     };
     fetchLikeVideos();
-  }, []);
+  }, [userId]);
   const [disvideos, setDisVideos] = useState([]);
   useEffect(() => {
     const fetchDisVideos = async () => {

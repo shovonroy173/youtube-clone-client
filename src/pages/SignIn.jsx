@@ -112,7 +112,7 @@ const SignIn = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
         axios
-          .post("https://youtubeapi-rlw4.onrender.com/auth/google", {
+          .post("/auth/google", {
             name: result.user.displayName,
             email: result.user.email,
             img: result.user.photoURL,

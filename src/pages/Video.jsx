@@ -131,7 +131,7 @@ const VideoFrame = styled.video`
 const Video = () => {
   const { currentUser } = useSelector((state) => state.user);
   const { currentVideo } = useSelector((state) => state.video);
-  console.log("LINE AT 128", currentVideo);
+  // console.log("LINE AT 128", currentVideo);
 
   const path = useLocation().pathname.split("/")[2];
   // console.log(path);
